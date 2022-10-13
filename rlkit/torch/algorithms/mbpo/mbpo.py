@@ -29,6 +29,7 @@ class MBPO(TorchRLAlgorithm):
         is_terminal: Callable,  # for fake_env
         model_replay_buffer: SimpleReplayBuffer = None,
         model_replay_buffer_size: int = 10000,
+        target_update_interval: int = 1,
         # model utilization params
         deterministic: bool = False,
         model_train_freq: int = 250,
