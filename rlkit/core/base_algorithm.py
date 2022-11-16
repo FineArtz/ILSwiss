@@ -269,7 +269,7 @@ class BaseAlgorithm(metaclass=abc.ABCMeta):
                 ):
                     env_ind_local = [
                         i
-                        for i in self._ready_env_ids
+                        for i in self.ready_env_ids
                         if len(self._current_path_builder[i]) >= self.max_path_length
                     ]
                     self._handle_vec_rollout_ending(env_ind_local)
