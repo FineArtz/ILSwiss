@@ -1,8 +1,8 @@
 import abc
 import numpy as np
+import torch
 
 from rlkit.core.base_algorithm import BaseAlgorithm
-
 
 class TorchBaseAlgorithm(BaseAlgorithm, metaclass=abc.ABCMeta):
     @property
