@@ -4,6 +4,7 @@ import torch
 
 from rlkit.core.base_algorithm import BaseAlgorithm
 
+
 class TorchBaseAlgorithm(BaseAlgorithm, metaclass=abc.ABCMeta):
     @property
     @abc.abstractmethod
