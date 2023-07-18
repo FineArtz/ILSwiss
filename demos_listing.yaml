@@ -1,22 +1,3 @@
-# hopper_4:
-#   description: "Hopper"
-#   file_paths: [
-#     ./demos/norm_hopper_4_demos_20_subsampling.pkl
-#   ]
-
-# hopper_32:
-#   description: "Hopper"
-#   file_paths: [
-#     ./demos/norm_hopper_32_demos_20_subsampling.pkl
-#   ]
-
-
-# walker_4:
-#   description: "Walker2d"
-#   file_paths: [
-#     ./demos/norm_walker_4_demos_20_subsampling.pkl
-#   ]
-
 hopper_sac:
   description: "Hopper, expert"
   file_paths: [

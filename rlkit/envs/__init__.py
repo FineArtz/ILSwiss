@@ -93,7 +93,7 @@ def get_envs(env_specs, env_wrapper=None, wrapper_kwargs={}, **kwargs):
         else:
             env_class = load(envs_dict[domain])
 
-        if ("env_num" not in env_specs.keys()) or (env_specs["env_num"] <= 1):
+        if "env_num" not in env_specs.keys() or env_specs["env_num"] <= 1:
             envs = env_wrapper(env_class(**env_specs["env_kwargs"]), **wrapper_kwargs)
 
             if domain in env_overwrite:

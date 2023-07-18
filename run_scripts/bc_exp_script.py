@@ -27,37 +27,18 @@ def experiment(variant):
         listings = yaml.safe_load(f.read())
 
     demos_path = listings[variant["expert_name"]]["file_paths"][variant["expert_idx"]]
-    """
-    Buffer input format
-    """
-    # buffer_save_dict = joblib.load(expert_demos_path)
-    # expert_replay_buffer = buffer_save_dict['train']
-    # obs_mean, obs_std = buffer_save_dict['obs_mean'], buffer_save_dict['obs_std']
-    # acts_mean, acts_std = buffer_save_dict['acts_mean'], buffer_save_dict['acts_std']
-    # obs_min, obs_max = buffer_save_dict['obs_min'], buffer_save_dict['obs_max']
-    # if 'minmax_env_with_demo_stats' in variant.keys():
-    #     if (variant['minmax_env_with_demo_stats']) and not (variant['scale_env_with_demo_stats']):
-    #         assert 'norm_train' in buffer_save_dict.keys()
-    #         expert_replay_buffer = buffer_save_dict['norm_train']
-    """
-    PKL input format
-    """
     print("demos_path", demos_path)
     with open(demos_path, "rb") as f:
         traj_list = pickle.load(f)
     traj_list = random.sample(traj_list, variant["traj_num"])
 
     obs = np.vstack([traj_list[i]["observations"] for i in range(len(traj_list))])
-    # acts = np.vstack([traj_list[i]["actions"] for i in range(len(traj_list))])
     obs_mean, obs_std = np.mean(obs, axis=0), np.std(obs, axis=0)
-    # acts_mean, acts_std = np.mean(acts, axis=0), np.std(acts, axis=0)
     acts_mean, acts_std = None, None
     obs_min, obs_max = np.min(obs, axis=0), np.max(obs, axis=0)
 
-    # print("obs:mean:{}".format(obs_mean))
-    # print("obs_std:{}".format(obs_std))
-    # print("acts_mean:{}".format(acts_mean))
-    # print("acts_std:{}".format(acts_std))
+    print("obs_mean:\n {}".format(obs_mean))
+    print("obs_std:\n {}".format(obs_std))
 
     env_specs = variant["env_specs"]
     env = get_env(env_specs)
@@ -85,7 +66,7 @@ def experiment(variant):
 
     if variant["scale_env_with_demo_stats"]:
         print("\nWARNING: Using scale env wrapper")
-        tmp_env_wrapper = env_wrapper = ScaledEnv
+        env_wrapper = ScaledEnv
         wrapper_kwargs = dict(
             obs_mean=obs_mean,
             obs_std=obs_std,
@@ -94,7 +75,7 @@ def experiment(variant):
         )
     elif variant["minmax_env_with_demo_stats"]:
         print("\nWARNING: Using min max env wrapper")
-        tmp_env_wrapper = env_wrapper = MinmaxEnv
+        env_wrapper = MinmaxEnv
         wrapper_kwargs = dict(obs_min=obs_min, obs_max=obs_max)
 
     obs_space = env.observation_space
@@ -107,6 +88,7 @@ def experiment(variant):
         (acts_mean is None) and (acts_std is None)
     ):
         print("\nWARNING: Using Normalized Box Env wrapper")
+        tmp_env_wrapper = env_wrapper
         env_wrapper = lambda *args, **kwargs: NormalizedBoxEnv(
             tmp_env_wrapper(*args, **kwargs)
         )
