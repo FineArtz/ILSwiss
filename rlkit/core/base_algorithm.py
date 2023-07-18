@@ -37,8 +37,6 @@ class BaseAlgorithm(metaclass=abc.ABCMeta):
         replay_buffer_size=10000,
         freq_saving=1,
         save_replay_buffer=False,
-        # save_environment=False,
-        # save_algorithm=False,
         save_best=False,
         save_epoch=False,
         save_best_starting_from_epoch=0,
@@ -71,8 +69,6 @@ class BaseAlgorithm(metaclass=abc.ABCMeta):
         self.render = render
 
         self.save_replay_buffer = save_replay_buffer
-        # self.save_algorithm = save_algorithm
-        # self.save_environment = save_environment
         self.save_best = save_best
         self.save_epoch = save_epoch
         self.save_best_starting_from_epoch = save_best_starting_from_epoch
@@ -365,6 +361,9 @@ class BaseAlgorithm(metaclass=abc.ABCMeta):
         return (
             self.replay_buffer.num_steps_can_sample() >= self.min_steps_before_training
         )
+    
+    def _warmup_phase(self):
+        return not self._can_train()
 
     def _get_action_and_info(self, observation):
         """
@@ -373,7 +372,7 @@ class BaseAlgorithm(metaclass=abc.ABCMeta):
         :return:
         """
         self.exploration_policy.set_num_steps_total(self._n_env_steps_total)
-        if not self._can_train():
+        if self._warmup_phase():
             return [self.action_space.sample() for _ in range(len(observation))]
         return self.exploration_policy.get_actions(
             observation,

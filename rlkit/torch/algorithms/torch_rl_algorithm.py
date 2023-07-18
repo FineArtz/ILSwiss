@@ -25,6 +25,12 @@ class TorchRLAlgorithm(TorchBaseAlgorithm):
         for net in self.networks:
             net.train(mode)
 
+    def _warmup_phase(self):
+        # on policy algorithms don't need a warmup phase
+        if getattr(self.trainer, "on_policy", False):
+            return False
+        return super()._warmup_phase()
+
     def _do_training(self, epoch):
         for _ in range(self.num_train_steps_per_train_call):
             if getattr(self.trainer, "on_policy", False):
