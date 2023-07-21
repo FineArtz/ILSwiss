@@ -46,7 +46,7 @@ class MBPO(TorchRLAlgorithm):
         self.algo = algo
         self.is_terminal = is_terminal
         self.fake_env = FakeEnv(
-            self.model, self.is_terminal, self.model.get_random_model_index
+            self.model.bnn, self.is_terminal, self.model.get_random_model_index
         )
         self.model_replay_buffer_size = model_replay_buffer_size
         if model_replay_buffer is None:
@@ -265,6 +265,10 @@ class MBPO(TorchRLAlgorithm):
             f"Model Rollout | Added: {total_steps:.1e} | Model pool: {self.model_replay_buffer._size:.1e} (max {self.model_replay_buffer._max_replay_buffer_size:.1e}) | Mean length: {mean_len} | Train rep: {self.num_train_steps_per_train_call}"
         )
         return {"mean_rollout_length": mean_len}
+    
+    def _end_epoch(self):
+        self.model.end_epoch()
+        return super()._end_epoch()
 
     @property
     def networks(self) -> List[nn.Module]:

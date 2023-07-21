@@ -3,6 +3,8 @@ import argparse
 import os
 import sys
 import inspect
+import numpy as np
+import torch
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -86,6 +88,12 @@ def experiment(variant):
         obs_dim=obs_dim,
         action_dim=action_dim,
     )
+    try:
+        qf1 = torch.compile(qf1)
+        qf2 = torch.compile(qf2)
+        policy = torch.compile(policy)
+    except AttributeError:
+        pass
 
     trainer = SoftActorCritic(
         policy=policy,

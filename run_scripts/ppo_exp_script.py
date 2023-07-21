@@ -10,6 +10,7 @@ sys.path.insert(0, parentdir)
 print(sys.path)
 
 import gym
+import numpy as np
 import torch
 
 from rlkit.envs import get_env, get_envs
