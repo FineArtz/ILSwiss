@@ -1,5 +1,7 @@
 # ILSwiss
 
+[News!] We have tested the environment in Python 3.10 and PyTorch 2.0 with other packages in new versions. You can install the new environment from `requirement2.yaml`. Notice that new versions of `gym` and `gymnasium` are not consistent yet.
+
 [News!] We are now support [envpool](https://github.com/sail-sg/envpool) for accelerating training, see example yaml file in `https://github.com/Ericonaldo/ILSwiss/blob/main/exp_specs/sac/sac_hopper_envpool.yaml`.
 
 [News!] We have implemented CURL and RAD in torch for potential imgae-based researches, see yaml file in `exp_specs`.
