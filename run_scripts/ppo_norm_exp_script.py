@@ -8,7 +8,8 @@ sys.path.insert(0, parentdir)
 print(sys.path)
 
 import gym
-from torch import tanh
+import numpy as np
+import torch
 
 from rlkit.envs import get_env, get_envs
 from rlkit.envs.wrappers import NormalizedBoxEnv, ProxyEnv
@@ -97,7 +98,7 @@ def experiment(variant):
         obs_dim=obs_dim,
         condition_dim=goal_dim,
         action_dim=action_dim,
-        output_activation=tanh,
+        output_activation=torch.tanh,
         policy_noise=variant["policy_noise"],
         policy_noise_clip=variant["policy_noise_clip"],
     )
